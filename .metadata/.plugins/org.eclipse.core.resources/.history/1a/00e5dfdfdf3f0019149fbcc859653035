@@ -1,0 +1,53 @@
+package com.yychat.view;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+
+import javax.swing.*;
+
+public class FriendList extends JFrame{
+
+//容器
+	//成员变量
+    JPanel myFriendPanel;
+    JButton myFriendButton;
+    JScrollPane myFriendListJScrollPane;
+    JPanel myFriendListJPanel;
+    public static final int MYFRIENDCOUNT=51;
+    JLabel[] myFriendJLabel=new JLabel[MYFRIENDCOUNT];//50好友数组，对参数组
+    
+    JPanel	myStrangerBlackListPanel;
+    JButton myStrangerButton;
+    JButton blackListButton;
+    
+    public  FriendList(){
+    	myFriendPanel=new JPanel(new BorderLayout());//布局问题，边界布局
+    	System.out.println(myFriendPanel.getLayout());
+        
+    	//北部
+    	myFriendButton= new JButton("我的好友");
+    	myFriendPanel.add(myFriendButton,"North");
+    	
+    	//中部
+    	myFriendListJPanel=new JPanel(new GridLayout(MYFRIENDCOUNT-1,1));//网格布局
+    	for(int i=1;i<MYFRIENDCOUNT;i++);{
+			myFriendJLabel[i]=new JLabel(i+"",new ImageIcon("images/duck.gif"),JLabel.LEFT));
+			myFriendListJPanel.add(myFriendJLabel[i]);   
+		}
+    	/*myFriendListJScrollPane=new JScrollPane();
+    	myFriendListJScrollPane.add(myFriendListJPanel);*/
+    	myFriendListJScrollPane=new JScrollPane(myFriendListJPanel);
+    	myFriendPanel.add(myFriendListJScrollPane);
+    	
+    	
+    	this.add(myFriendPanel);
+    	this.setSize(150,500);
+    	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	this.setLocationRelativeTo(null);
+    	this.setVisible(true);
+    }
+    
+    public static void main(string[] args){
+    	FriendList friendList=new FriendList();
+    }
+}
