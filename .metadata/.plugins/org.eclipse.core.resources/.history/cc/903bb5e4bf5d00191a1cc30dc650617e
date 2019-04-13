@@ -63,13 +63,9 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
     	for(int i=1;i<MYFRIENDCOUNT;i++){
 			myFriendJLabel[i]=new JLabel(i+"",new ImageIcon("images/yy0.gif"),JLabel.LEFT);
 			myFriendJLabel[i].setEnabled(false);
-			//激活自己的图标
-			//if(Integer.parseInt(userName)==i) myFriendJLabel[i].setEnabled(true);		
 			myFriendJLabel[i].addMouseListener(this);
 			myFriendListJPanel.add(myFriendJLabel[i]);   
 		}
-    	//激活自己的图标
-    	myFriendJLabel[Integer.parseInt(userName)].setEnabled(true);
     	/*myFriendListJScrollPane=new JScrollPane();
     	myFriendListJScrollPane.add(myFriendListJPanel);*/
     	myFriendListJScrollPane=new JScrollPane(myFriendListJPanel);

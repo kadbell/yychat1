@@ -25,7 +25,7 @@ public class ServerReceiverThread extends Thread{//必须要有run方法
 			try {
 				//接受信息
 				ois=new ObjectInputStream(s.getInputStream());
-				Message mess=(Message)ois.readObject();
+				Message mess=(Message)ois.readObject();//接收用户发送来的聊天信息，阻塞
 				System.out.println("等待用户发送聊天信息");
 				System.out.println(mess.getSender()+"对"+mess.getReceiver()+"说:"+mess.getContent());
 				
@@ -37,8 +37,13 @@ public class ServerReceiverThread extends Thread{//必须要有run方法
 					System.out.println("服务器转发了信息"+mess.getSender()+"对"+mess.getReceiver()+"说:"+mess.getContent());
 				}
 				
+				
+				if(mess.getMessageType().equals(Message.message_RequestOnlineFriend)){
+					
+					
+				}
+				
 			} catch (IOException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

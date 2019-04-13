@@ -1,4 +1,4 @@
-package com.yychat.view;
+/*package com.yychat.view;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 import javax.swing.*;
 
@@ -71,7 +72,8 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//只允
 			mess.setMessageType(Message.message_Common);
 			ObjectOutputStream oos;
 			try {
-				oos=new ObjectOutputStream(ClientConnetion.s.getOutputStream());
+				Socket s=(Socket)ClientConnetion.hmSocket.get(sender);
+				oos=new ObjectOutputStream(s.getOutputStream());//拿不到非静态Socket对象
 				oos.writeObject(mess);
 				
 				//是不是在这里接收？
@@ -79,7 +81,7 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//只允
 				mess=(Message)ois.readObject();
 				jta.append(mess.getSender()+"对"+mess.getReceiver()+"说:"+mess.getContent()+"\r\n");
 				*/
-				} catch (IOException  e) {
+/*				} catch (IOException  e) {
 				e.printStackTrace();
 			}
 		}
@@ -94,8 +96,9 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//只允
 		while(true){
 			try {
 				//接受服务器转发过来的Message
-				ois = new ObjectInputStream(ClientConnetion.s.getInputStream());
-				mess=(Message)ois.readObject();//等待Server发送Message
+				Socket s=(Socket)ClientConnetion.hmSocket.get(sender);
+				ois = new ObjectInputStream(s.getInputStream());
+				mess=(Message)ois.readObject();//等待Server发送Message，阻塞
 				jta.append(mess.getSender()+"对"+mess.getReceiver()+"说:"+mess.getContent()+"\r\n");
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -103,4 +106,5 @@ public class FriendChat extends JFrame implements ActionListener,Runnable{//只允
 		}
 	}
 
-}
+}*/
+
