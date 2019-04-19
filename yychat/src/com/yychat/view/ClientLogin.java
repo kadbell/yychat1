@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 
 import javax.swing.*;
 
@@ -15,7 +16,9 @@ import com.yychat.model.Message;
 import com.yychat.model.User;
 //在类中实现监听器接口
 public class ClientLogin extends JFrame implements ActionListener{//类名：ClientLogin,继承
-    //定义北部的组件
+    public static HashMap hmFriendList=new HashMap<String,FriendList>();//创建保存FriendList对象的HashMap
+	
+	//定义北部的组件
 	JLabel jlbl1;
 	//定义中部的组件
 	JTabbedPane jtp1;//选项卡组件
@@ -88,13 +91,15 @@ public class ClientLogin extends JFrame implements ActionListener{//类名：Client
 			
 			Message mess=new ClientConnetion().loginValidate(user);
 			if(mess.getMessageType().equals(Message.message_LoginSuccess)){
-				new FriendList(userName);
-				
+				FriendList friendList=new FriendList(userName);//创建好友列表对象之后
+				//保存friendList
+				hmFriendList.put(userName,friendList);
 				//第1步
 				//发送message_RequestOnlineFriend信息给服务器
 				Message mess1=new Message();
 				mess1.setSender(userName);
 				mess1.setReceiver("Server");
+				//设置信息类型，请求获得哪些好友在线
 				mess1.setMessageType(Message.message_RequestOnlineFriend);//设置信息类型
 				Socket s=(Socket)ClientConnetion.hmSocket.get(userName);
 				ObjectOutputStream oos;

@@ -51,7 +51,7 @@ public class StartServer {
 	                hmSocket.put(userName, s);
 	                System.out.println("保存用户的Socket"+userName+s);
 	                //如何接收客户端的聊天信息？另建一个线程来接收聊天信息
-	                new ServerReceiverThread(s).start();//创建线程，并让线程就绪
+	                new ServerReceiverThread(s,hmSocket).start();//创建线程，并让线程就绪
 	                System.out.println("启动线程成功");
 	            }
 	            
