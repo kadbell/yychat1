@@ -79,6 +79,19 @@ public class StartServer {
         	    if(loginSuccess){
         	    //消息传递，创建Message对象
 	        	    mess.setMessageType(Message.message_LoginSuccess);//验证通过
+	        	    
+	        	    //从数据库relation表中读取好友信息来更新好友列表1、服务器读好友数据出来
+	        	    String friend_Relation_Sql="select slaveuser from relation where majoruser=? and relationtype='1'";
+	        	    ptmt=conn.prepareStatement(friend_Relation_Sql);
+	        	    ptmt.setString(1,userName);
+	        	    rs=ptmt.executeQuery();
+	        	    String friendString="";
+	        	    while(rs.next()){//移动结果集中的指针，一个个的取出好友的名字
+	        	    	//rs.getString(1);
+	        	    	friendString=friendString+rs.getString("slaveuser")+" ";
+	        	    }
+	        	    mess.setContent(friendString);
+	        	    System.out.println(userName+"的全部好友："+friendString);
 	            }
 	            else{
 	        	    mess.setMessageType(Message.message_LoginFailure);//验证不通过
