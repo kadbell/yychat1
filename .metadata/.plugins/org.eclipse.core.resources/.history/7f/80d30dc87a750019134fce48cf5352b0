@@ -59,13 +59,13 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
     	myFriendPanel.add(myFriendButton,"North");
     	
     	//中部
-    	String[] friendName=friendString.split(" ");
+    	String[] friendName=friendString.split("");
     	int count=friendName.length;
     	
     	myFriendListJPanel=new JPanel(new GridLayout(count,1));//网格布局
     	for(int i=0;i<count;i++){
 			myFriendJLabel[i]=new JLabel(friendName[i]+"",new ImageIcon("images/yy0.gif"),JLabel.LEFT);
-			//myFriendJLabel[i].setEnabled(false);
+			myFriendJLabel[i].setEnabled(false);
 			//激活自己的图标
 			//if(Integer.parseInt(userName)==i) myFriendJLabel[i].setEnabled(true);		
 			myFriendJLabel[i].addMouseListener(this);

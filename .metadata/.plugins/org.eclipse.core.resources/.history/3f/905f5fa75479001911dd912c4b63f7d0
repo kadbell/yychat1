@@ -54,8 +54,6 @@ public class StartServer {
         	    mess.setReceiver(user.getUserName());
         	    if(loginSuccess){
         	    //消息传递，创建Message对象
-        	    	mess.setMessageType(Message.message_LoginSuccess);
-        	    	//从数据库relation表中读取好友信息来更新好友列表1、服务器读取好友名字
 	        	    String friendString=YychatDbUtil.getFriendString(userName);   
 	        	    mess.setContent(friendString);
 	        	    System.out.println(userName+"的全部好友："+friendString);
