@@ -1,7 +1,6 @@
 package controller;
 
 import java.sql.Connection;
-import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,22 +40,20 @@ public class YychatDbUtil {
     //添加新用户的方法
     public static void addUser(String userName,String passWord){
     	Connection conn=getConnection();
-    	String user_Add_Sql="insert into user(userName,passWord,registertimestamp) values(?,?,?)";
+    	String user_Add_Sql="insert into user(userNm) from user where username=?";
         PreparedStatement ptmt=null;
+        ResultSet rs=null;
 		try {
-			ptmt = conn.prepareStatement(user_Add_Sql);
+			ptmt = conn.prepareStatement(user_Seek_Sql);
 			ptmt.setString(1,userName);
-			ptmt.setString(2,passWord);
-			//java.util.Date date=new java.util.Date();//类的完全限定名
-			Date date=new Date();
-			java.sql.Timestamp timestamp=new java.sql.Timestamp(date.getTime());
-			ptmt.setTimestamp(3,timestamp);
 	        //执行preparedStatement
-	        int count=ptmt.executeUpdate();
+	        rs=ptmt.executeQuery();
+	        //判断结果集
+	        seekSuccess=rs.next();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			closeDB(conn,ptmt);
+			closeDB(conn,ptmt,rs);
 		}
 
     }
@@ -147,21 +144,5 @@ public class YychatDbUtil {
 				e.printStackTrace();
 			}
     	}
-    }
-    	public static void closeDB(Connection conn,PreparedStatement ptmt){//方法的重载
-        	if(conn!=null){
-        		try {
-    				conn.close();
-    			} catch (SQLException e) {
-    				e.printStackTrace();
-    			}
-        	}
-        	if(ptmt!=null){
-        		try {
-    				ptmt.close();
-    			} catch (SQLException e) {
-    				e.printStackTrace();
-    			}
-        	}	 
     }
  }

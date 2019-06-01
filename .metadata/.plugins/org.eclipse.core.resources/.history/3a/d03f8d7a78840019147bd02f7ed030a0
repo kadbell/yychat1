@@ -36,7 +36,6 @@ public class ClientConnetion {
 			 mess=(Message)ois.readObject();//接收到登录是否成功的mess
 			 if(mess.getMessageType().equals(Message.message_RegisterSuccess))
 				 registerSuccess=true;
-			 s.close();//关闭服务器端的socket对象
         } catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

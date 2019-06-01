@@ -61,6 +61,7 @@ public class ClientLogin extends JFrame implements ActionListener{//类名：Client
 		jb1=new JButton(new ImageIcon("Images/denglu.gif"));
 		jb1.addActionListener(this);//添加监听器
 		jb2=new JButton(new ImageIcon("Images/zhuce.gif"));
+		jb2.addActionListener(this);//注册新用户步骤1：为注册按钮添加动作监听器
 		jb3=new JButton(new ImageIcon("Images/quxiao.gif"));
 		jp1=new JPanel();
 		jp1.add(jb1);jp1.add(jb2);jp1.add(jb3);
@@ -80,7 +81,26 @@ public class ClientLogin extends JFrame implements ActionListener{//类名：Client
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {//添加事件处理代码
+	public void actionPerformed(ActionEvent arg0) {//3.添加事件处理代码
+		//注册新用户2：响应动作代码
+		if(arg0.getSource()==jb2){
+			String userName=jtf1.getText();
+			String passWord=new String(jpf1.getPassword());
+			User user=new User();
+			user.setUserName(userName);
+			user.setPassWord(passWord);
+			user.setUserMessageType("USER_REGISTER");
+			boolean registerSuccess=new ClientConnetion().registerUserIntoDB(user);
+			
+			//注册新用户步骤4：显示注册成功或失败的提示信息
+			if(registerSuccess){
+				JOptionPane.showMessageDialog(this,"注册成功！");
+			}else{
+				JOptionPane.showMessageDialog(this,"用户名已经注册，注册失败");
+			}
+			
+		}
+		
 		if(arg0.getSource()==jb1){
 			String userName=jtf1.getText();
 			String passWord=new String(jpf1.getPassword());
@@ -91,8 +111,8 @@ public class ClientLogin extends JFrame implements ActionListener{//类名：Client
 			
 			Message mess=new ClientConnetion().loginValidate(user);
 			if(mess.getMessageType().equals(Message.message_LoginSuccess)){
-				String friengString=mess.getContent();
 				
+				String friendString=mess.getContent();
 				FriendList friendList=new FriendList(userName,friendString);//创建好友列表对象之后
 				//保存friendList
 				hmFriendList.put(userName,friendList);

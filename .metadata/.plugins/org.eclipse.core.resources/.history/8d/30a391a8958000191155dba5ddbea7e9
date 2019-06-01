@@ -23,7 +23,7 @@ public class ClientConnetion {
 		}
 	}
 			
-    //注册新用户5：创建registerUserIntoDB方法来发送user对象到服务器端，并且接收服务器返回的message
+    //发送user对象到服务器端，并且接收服务器返回的message
 	public boolean registerUserIntoDB(User user){
 		boolean registerSuccess=false;
 		ObjectOutputStream oos;
@@ -34,9 +34,7 @@ public class ClientConnetion {
 			 
 			 ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
 			 mess=(Message)ois.readObject();//接收到登录是否成功的mess
-			 if(mess.getMessageType().equals(Message.message_RegisterSuccess))
-				 registerSuccess=true;
-			 s.close();//关闭服务器端的socket对象
+			 
         } catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

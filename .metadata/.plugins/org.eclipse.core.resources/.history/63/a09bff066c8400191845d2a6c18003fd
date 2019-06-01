@@ -1,7 +1,6 @@
 package controller;
 
 import java.sql.Connection;
-import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,29 +35,6 @@ public class YychatDbUtil {
 			e.printStackTrace();
 		}
     	return conn;
-    }
-    
-    //添加新用户的方法
-    public static void addUser(String userName,String passWord){
-    	Connection conn=getConnection();
-    	String user_Add_Sql="insert into user(userName,passWord,registertimestamp) values(?,?,?)";
-        PreparedStatement ptmt=null;
-		try {
-			ptmt = conn.prepareStatement(user_Add_Sql);
-			ptmt.setString(1,userName);
-			ptmt.setString(2,passWord);
-			//java.util.Date date=new java.util.Date();//类的完全限定名
-			Date date=new Date();
-			java.sql.Timestamp timestamp=new java.sql.Timestamp(date.getTime());
-			ptmt.setTimestamp(3,timestamp);
-	        //执行preparedStatement
-	        int count=ptmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally{
-			closeDB(conn,ptmt);
-		}
-
     }
     //在User表中查找userName用户
     public static boolean seekUser(String userName){
@@ -147,21 +123,5 @@ public class YychatDbUtil {
 				e.printStackTrace();
 			}
     	}
-    }
-    	public static void closeDB(Connection conn,PreparedStatement ptmt){//方法的重载
-        	if(conn!=null){
-        		try {
-    				conn.close();
-    			} catch (SQLException e) {
-    				e.printStackTrace();
-    			}
-        	}
-        	if(ptmt!=null){
-        		try {
-    				ptmt.close();
-    			} catch (SQLException e) {
-    				e.printStackTrace();
-    			}
-        	}	 
     }
  }
