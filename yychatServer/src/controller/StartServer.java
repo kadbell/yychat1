@@ -60,7 +60,7 @@ public class StartServer {
 	            	}else{
 		            	//注册新用户步骤9：如果没有同名用户，把新用户的名字和密码写入到user表中，并返回注册成功的message
 	            		YychatDbUtil.addUser(userName,passWord);
-	 	        	    mess.setMessageType(Message.message_RegisterFailure);
+	 	        	    mess.setMessageType(Message.message_RegisterSuccess);
 	            	}
 		            sendMessage(s,mess);
 	            	s.close();//注册结束，应该关闭socket对象

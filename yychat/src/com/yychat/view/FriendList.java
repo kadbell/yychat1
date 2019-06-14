@@ -5,10 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.*;
+
+import com.yychat.controller.ClientConnetion;
+import com.yychat.model.Message;
 
 public class FriendList extends JFrame implements ActionListener,MouseListener {//容器，接口   
 	public static HashMap hmFriendChat1=new HashMap<String,FriendChat1>();
@@ -17,6 +23,8 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
 	CardLayout cardLayout;
 	//第一张卡片
     JPanel myFriendPanel;
+    JPanel addFriendPanel;//添加好友的面板
+    JButton addFriendButton;
     JButton myFriendButton;//北部
     
     JScrollPane myFriendListJScrollPane;
@@ -55,22 +63,21 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
     	//System.out.println(myFriendPanel.getLayout());
         
     	//北部
+    	//添加新的好友，步骤1.添加好友的按钮
+    	addFriendButton= new JButton("添加好友");
+    	addFriendButton.addActionListener(this);//增加监听器
     	myFriendButton= new JButton("我的好友");
-    	myFriendPanel.add(myFriendButton,"North");
+    	addFriendPanel=new JPanel(new GridLayout(2,1));//Alt+/
+    	addFriendPanel.add(addFriendButton);
+    	addFriendPanel.add(myFriendButton);
+    	myFriendPanel.add(addFriendPanel,"North");
+    	//myFriendPanel.add(myFriendButton,"North");
     	
     	//中部
-    	String[] friendName=friendString.split(" ");
-    	int count=friendName.length;
+    	myFriendListJPanel=new JPanel();
+    	updateFriendIcon(friendString);
     	
-    	myFriendListJPanel=new JPanel(new GridLayout(count,1));//网格布局
-    	for(int i=0;i<count;i++){
-			myFriendJLabel[i]=new JLabel(friendName[i]+"",new ImageIcon("images/yy0.gif"),JLabel.LEFT);
-			//myFriendJLabel[i].setEnabled(false);
-			//激活自己的图标
-			//if(Integer.parseInt(userName)==i) myFriendJLabel[i].setEnabled(true);		
-			myFriendJLabel[i].addMouseListener(this);
-			myFriendListJPanel.add(myFriendJLabel[i]);   
-		}
+    	
     	//激活自己的图标
     	//myFriendJLabel[Integer.parseInt(userName)].setEnabled(true);
     	/*myFriendListJScrollPane=new JScrollPane();
@@ -146,13 +153,30 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
     	this.setLocationRelativeTo(null);
     	this.setVisible(true);
     }
+
+	public void updateFriendIcon(String friendList) {
+		myFriendListJPanel.removeAll();//先移除好友列表面板中的全部组件
+		
+		String[] friendName=friendList.split(" ");
+    	int count=friendName.length;
+    	
+    	myFriendListJPanel.setLayout(new GridLayout(count,1));//网格布局
+    	for(int i=0;i<count;i++){
+			myFriendJLabel[i]=new JLabel(friendName[i]+"",new ImageIcon("images/yy0.gif"),JLabel.LEFT);
+			//myFriendJLabel[i].setEnabled(false);
+			//激活自己的图标
+			//if(Integer.parseInt(userName)==i) myFriendJLabel[i].setEnabled(true);		
+			myFriendJLabel[i].addMouseListener(this);
+			myFriendListJPanel.add(myFriendJLabel[i]);   
+		}
+	}
     
     public static void main(String[] args){
 		//FriendList friendList=new FriendList("pdh");
     }
     
     public void setEnabledNewOnlineFriend(String newonlineFriend){
-    	myFriendJLabel[Integer.parseInt(newonlineFriend)].setEnabled(true);
+    	//myFriendJLabel[Integer.parseInt(newonlineFriend)].setEnabled(true);
     }
     
     public void setEnabledOnlineFriend(String onlineFriend){
@@ -164,7 +188,7 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
     	System.out.println("friendName数组中的元素个数："+count);
     	for(int i=1;i<count;i++){
     		System.out.println("friendName数组中的第"+i+"元素:"+friendName[i]);
-    		myFriendJLabel[Integer.parseInt(friendName[i])].setEnabled(true);
+    		//myFriendJLabel[Integer.parseInt(friendName[i])].setEnabled(true);
     	}
     	
     	
@@ -172,7 +196,24 @@ public class FriendList extends JFrame implements ActionListener,MouseListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {//响应事件的方法
-		// TODO Auto-generated method stub
+		//添加新的好友，步骤2.点击添加好友按钮，要弹出一个输入框，添加动作响应代码
+		if(e.getSource()==addFriendButton){
+			String addFriendName=JOptionPane.showInputDialog(null,"请输入用户名","添加好友",JOptionPane.DEFAULT_OPTION);
+		    //添加新的好友，步骤4.发送新添加好友的Message到服务器端
+			Message mess=new Message();
+			mess.setSender(userName);
+			mess.setReceiver("server");
+			mess.setContent(addFriendName);//好友的名字发送到了服务器端
+			mess.setMessageType(Message.message_AddFriend);
+			Socket s=(Socket)ClientConnetion.hmSocket.get(userName);
+			ObjectOutputStream oos;
+			try {
+				oos = new ObjectOutputStream(s.getOutputStream());
+				oos.writeObject(mess);//发送message对象
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 		if(e.getSource()==myStrangerButton) cardLayout.show(this.getContentPane(),"2");
 		if(e.getSource()==myFriendButton1) cardLayout.show(this.getContentPane(),"1");
 		

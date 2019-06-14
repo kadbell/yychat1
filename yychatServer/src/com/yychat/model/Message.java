@@ -1,13 +1,21 @@
 package com.yychat.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Message implements Serializable,MessageType{
 	private String sender;
 	private String receiver;
 	private String content;
 	private String messageType;
+    private Date sendTime;
 	
+	public Date getSendTime() {
+		return sendTime;
+	}
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
+	}
 	/*public Message(String sender){//构造方法
 		this.sender=sender;
 	}*/

@@ -3,6 +3,9 @@ package com.yychat.controller;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Date;
+
+import javax.swing.JOptionPane;
 
 import com.yychat.model.Message;
 import com.yychat.view.ClientLogin;
@@ -26,12 +29,27 @@ public class ClientReceiverThread extends Thread{
 				String chatMessageString=((mess.getSender()+"对"+mess.getReceiver()+"说:"+mess.getContent()+"\r\n"));
 				System.out.println(chatMessageString);
 				
+				if(mess.getMessageType().equals(Message.message_AddFriendFailure_NoUser)){
+					JOptionPane.showMessageDialog(null, "添加好友失败！用户名不存在");
+				}
+				if(mess.getMessageType().equals(Message.message_AddFriendFailure_AlreadyFriend)){
+					JOptionPane.showMessageDialog(null, "添加好友失败！不能重复添加好友");
+				}
+				if(mess.getMessageType().equals(Message.message_AddFriendSuccess)){
+					String allFriendName=mess.getContent();
+					FriendList friendList=(FriendList)ClientLogin.hmFriendList.get(mess.getSender());
+					friendList.updateFriendIcon(allFriendName);
+					friendList.revalidate();
+
+				}
+				
 				if(mess.getMessageType().equals(Message.message_Common)){
 					//希望聊天信息在好友的聊天界面上显示出来，该怎么实现的问题？
 					//1.拿到要显示聊天信息的friendChat对象
 					FriendChat1 friendChat1=(FriendChat1)FriendList.hmFriendChat1.get(mess.getReceiver()+"to"+mess.getSender());
 					//2.把聊天信息在JTextArea上显示
-					friendChat1.appendJta(chatMessageString);
+					Date date=mess.getSendTime();
+					friendChat1.appendJta(date.toString()+"\r\n"+chatMessageString);
 				}
 			
 				
